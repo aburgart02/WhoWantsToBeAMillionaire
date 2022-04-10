@@ -1,0 +1,13 @@
+body {
+    font-family: Arial, serif;
+    font-size: 14px;
+}
+
+.wrapper {
+    width: 960px;
+    margin: 0 auto;
+}
+
+.widget_field {
+    margin: 30px 0;
+}

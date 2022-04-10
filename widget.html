@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="emoji_widget">
+    <div class="emoji_widget_info">
+        Температура на завтра <span id="wbd-widget-temperature"></span> °C
+    </div>
+    <form id="emoji_widget_form" class="emoji_widget_form">
+        <label class="emoji_widget_label">
+            Выберите город
+            <select id="wbd-widget-city" class="wbd-widget__form-select">
+                <option value="37" selected="">Москва</option>
+                <option value="69">Санкт-Петербург</option>
+                <option value="125">Самара</option>
+                <option value="146">Красноярск</option>
+                <option value="98">Владивосток</option>
+            </select>
+        </label>
+        <label class="wbd-widget__form-label">
+            <input type="submit" id="wbd-widget-update" class="wbd-widget__form-submit" value="Обновить">
+        </label>
+    </form>
+</div>
+</body>
+</html>
