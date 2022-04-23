@@ -1,13 +1,86 @@
-body {
-    font-family: Arial, serif;
-    font-size: 14px;
+.picture {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
 }
 
-.wrapper {
-    width: 960px;
-    margin: 0 auto;
+.buttons button {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    font-size: 16px;
+    width: 600px;
+    height: 80px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+    color: white;
 }
 
-.widget_field {
-    margin: 30px 0;
+.button1 {
+    top: 84%;
+    left: 30%;
+}
+
+.button2 {
+    top: 84%;
+    left: 70%;
+}
+
+.button3 {
+    top: 94%;
+    left: 30%;
+}
+
+.button4 {
+    top: 94%;
+    left: 70%;
+}
+
+.startButton {
+    top: 50%;
+    left: 50%;
+}
+
+.question {
+    position: absolute;
+    color: white;
+    font-size: 28px;
+    top: 65%;
+    left: 20%;
+    overflow-wrap: normal;
+    word-wrap: normal;
+    word-break: normal;
+    line-break: auto;
+    hyphens: manual;
+    width: 60%;
+}
+
+.score {
+    color: white;
+    font-size: 40px;
+}
+
+#bar {
+    width: 80%;
+    background-color: #ddd;
+}
+
+#progress {
+    position: absolute;
+    left: 20%;
+    top: 55%;
+    width: 0;
+    height: 30px;
+    background-color: #4CAF50;
+    text-align: center;
+    line-height: 30px;
+    color: white;
 }
