@@ -22,9 +22,11 @@ function startGame() {
     error = false;
 }
 
-function finishGame() {
-    if (!error)
+function finishGame(index) {
+    if (!error) {
         gameScore += 10;
+        highlightAnswer(index, false);
+    }
     status[questionIndex] = true;
     let startButton = document.getElementById('start');
     let gameStatus = document.getElementById('st');
@@ -34,9 +36,7 @@ function finishGame() {
     questionIndex = 0;
 }
 
-function loadQuestion(btnIndex) {
-    if (btnIndex !== 0)
-        gameScore += 10;
+function updateField() {
     startTimer(questionIndex);
     status[questionIndex] = true;
     let question = document.getElementById('q');
@@ -49,11 +49,30 @@ function loadQuestion(btnIndex) {
     rightAnswer = questions[questionIndex][2];
     questionIndex += 1;
     answerIndex = 0;
+    let picture = document.getElementById('pct');
+    picture.src = 'materials/question_field.png';
+}
+
+function highlightAnswer(btnIndex, next) {
+    let picture = document.getElementById('pct');
+    picture.src = `materials/${btnIndex}.png`;
+    if (next) {
+        let timeout = setTimeout('updateField()', 2000);
+    }
+}
+
+function loadQuestion(btnIndex) {
+    if (btnIndex !== 0) {
+        gameScore += 10;
+        highlightAnswer(btnIndex, true);
+    }
+    else
+        updateField();
 }
 
 function eventHandler(btnIndex) {
     if (questionIndex === questions.length && btnIndex === rightAnswer)
-        finishGame();
+        finishGame(btnIndex);
     else {
         if (btnIndex === 0)
             startGame();
@@ -61,7 +80,7 @@ function eventHandler(btnIndex) {
             loadQuestion(btnIndex);
         else {
             error = true;
-            finishGame();
+            finishGame(btnIndex);
         }
     }
 }
