@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            background-image: url("background3.png");
+            background-image: url("materials/background.png");
             background-size: cover;
             background-color: #c7b39b;
         }
@@ -15,17 +15,17 @@
 <body>
 <div class="container">
     <div id="bar"><div id="progress">30</div></div>
-    <img src="background2.png" class="picture" alt="Поле ответов">
+    <img src="materials/question_field.png" class="picture" alt="Поле ответов">
     <label class="question" id="q">
         В о п р о с ф ф ф ф ф ф ф ф ф ф ф ф ф ф ф ф ф ф ф ф ф ф ф ф ф ф  ф фф ф ф ф ф ф   ф ф ф ф ф   фф ф ф ф ф ф ф ф фф ф ф ф ф ф ф ф ф ф ф ф ф ф фф ф   ф ф ф ф фф ф ф ф ф ф ф ф
     </label>
-    <label class="score" id="s">Счёт</label>
+    <label class="score" id="s"></label>
     <div class="buttons">
-        <button class="button1" onclick="checkAnswer(1, this)"></button>
-        <button class="button2" onclick="checkAnswer(2, this)"></button>
-        <button class="button3" onclick="checkAnswer(3, this)"></button>
-        <button class="button4" onclick="checkAnswer(4, this)"></button>
-        <button class="startButton" onclick="checkAnswer(0, this)">Начать игру</button>
+        <button class="button1" onclick="eventHandler(1)"></button>
+        <button class="button2" onclick="eventHandler(2)"></button>
+        <button class="button3" onclick="eventHandler(3)"></button>
+        <button class="button4" onclick="eventHandler(4)"></button>
+        <button class="startButton" onclick="eventHandler(0)" id="start">Начать игру</button>
     </div>
     <script src="script.js"></script>
 </div>
