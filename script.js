@@ -6,24 +6,31 @@ let rightAnswer = 0;
 let questionIndex = 0;
 let answerIndex = 0;
 let gameScore = 0;
+let error = false;
 
 
 function startGame() {
     let startButton = document.getElementById('start');
-    let score = document.getElementById('s');
+    let score = document.getElementById('sc');
+    let gameStatus = document.getElementById('st');
     startButton.hidden = true;
     score.hidden = true;
+    gameStatus.hidden = true;
     status = [false, false, false, false];
     rightAnswer = 0;
     gameScore = 0;
+    error = false;
 }
 
 function finishGame() {
-    gameScore += 10;
+    if (!error)
+        gameScore += 10;
     status[questionIndex] = true;
     let startButton = document.getElementById('start');
+    let gameStatus = document.getElementById('st');
     startButton.hidden = false;
     startButton.innerHTML = 'Начать игру';
+    gameStatus.hidden = false;
     questionIndex = 0;
 }
 
@@ -45,22 +52,32 @@ function loadQuestion(btnIndex) {
 }
 
 function eventHandler(btnIndex) {
-    if (questionIndex === questions.length)
+    if (questionIndex === questions.length && btnIndex === rightAnswer)
         finishGame();
     else {
         if (btnIndex === 0)
             startGame();
         if (btnIndex === rightAnswer || btnIndex === 0)
             loadQuestion(btnIndex);
+        else {
+            error = true;
+            finishGame();
+        }
     }
 }
 
 function changeScore(width, index) {
-    gameScore += 30 - parseInt(width / 2);
-    let score = document.getElementById('s');
-    score.innerHTML = gameScore;
-    if (index + 1 === questions.length)
+    let score = document.getElementById('sc');
+    if (error) {
+        score.innerHTML = gameScore;
         score.hidden = false;
+    }
+    else {
+        gameScore += 30 - parseInt(width / 2);
+        score.innerHTML = gameScore;
+        if (index + 1 === questions.length)
+            score.hidden = false;
+    }
 }
 
 function startTimer(index) {
