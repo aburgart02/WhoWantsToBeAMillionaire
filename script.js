@@ -8,8 +8,6 @@ let rightAnswer = 0;
 let questionIndex = 0;
 let answerIndex = 0;
 let gameScore = 0;
-let error = false;
-
 
 function startGame() {
     let startButton = document.getElementById('start');
@@ -18,24 +16,36 @@ function startGame() {
     startButton.hidden = true;
     score.hidden = true;
     gameStatus.hidden = true;
-    status = [false, false, false, false];
+    status = [];
     rightAnswer = 0;
     gameScore = 0;
-    error = false;
 }
 
-function finishGame(index) {
-    if (!error) {
-        gameScore += 10;
-        highlightAnswer(index, false);
+function disable_buttons() {
+    let buttons = document.querySelectorAll('button');
+    for (let btn of buttons) {
+        btn.disabled = true;
     }
-    status[questionIndex] = true;
+}
+
+function finishGame(index, correct) {
+    highlightAnswer(index, false);
     let startButton = document.getElementById('start');
     let gameStatus = document.getElementById('st');
-    startButton.hidden = false;
+    let score = document.getElementById('sc');
+    let progress = document.getElementById("progress");
+    disable_buttons();
+    startButton.disabled = false;
     startButton.innerHTML = 'Начать игру';
+    startButton.hidden = false;
     gameStatus.hidden = false;
+    if (correct)
+        score.innerHTML = gameScore + 10 + parseInt(parseInt(progress.style.width) / 2);
+    else
+        score.innerHTML = gameScore
+    score.hidden = false;
     questionIndex = 0;
+    rightAnswer = 0;
 }
 
 function updateField() {
@@ -45,6 +55,7 @@ function updateField() {
     let buttons = document.querySelectorAll('button');
     question.innerHTML = questions[questionIndex][0];
     for (let btn of buttons) {
+        btn.disabled = false;
         btn.innerHTML = questions[questionIndex][1][answerIndex];
         answerIndex += 1;
     }
@@ -58,6 +69,7 @@ function updateField() {
 function highlightAnswer(btnIndex, next) {
     let picture = document.getElementById('pct');
     picture.src = `materials/${btnIndex}.png`;
+    disable_buttons();
     if (next) {
         let timeout = setTimeout('updateField()', 2000);
     }
@@ -73,47 +85,38 @@ function loadQuestion(btnIndex) {
 }
 
 function eventHandler(btnIndex) {
+    status[questionIndex] = true;
     if (questionIndex === questions.length && btnIndex === rightAnswer)
-        finishGame(btnIndex);
+        finishGame(btnIndex, true);
     else {
-        if (btnIndex === 0)
+        if (btnIndex === 0) {
             startGame();
-        if (btnIndex === rightAnswer || btnIndex === 0)
             loadQuestion(btnIndex);
-        else {
-            error = true;
-            finishGame(btnIndex);
         }
-    }
-}
-
-function changeScore(width, index) {
-    let score = document.getElementById('sc');
-    if (error) {
-        score.innerHTML = gameScore;
-        score.hidden = false;
-    }
-    else {
-        gameScore += 30 - parseInt(width / 2);
-        score.innerHTML = gameScore;
-        if (index + 1 === questions.length)
-            score.hidden = false;
+        else if (btnIndex === rightAnswer)
+            loadQuestion(btnIndex);
+        else
+            finishGame(btnIndex, false);
     }
 }
 
 function startTimer(index) {
     let progress = document.getElementById("progress");
-    let width = 0;
+    let width = 60;
     let id = setInterval(frame, 500);
     function frame() {
-        if (width >= 60 || status[index + 1] === true) {
+        if (width <= 0) {
             clearInterval(id);
-            changeScore(width, index);
+            finishGame(index, false);
+        }
+        if (status[index + 1] === true) {
+            clearInterval(id);
+            gameScore += parseInt(width / 2);
         }
         else {
-            width++;
+            width--;
             progress.style.width = width + '%';
-            progress.innerHTML = 30 - parseInt(width / 2);
+            progress.innerHTML = parseInt(width / 2);
         }
     }
 }
