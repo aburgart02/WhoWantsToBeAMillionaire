@@ -40,7 +40,7 @@ function finishGame(index, correct, timeIsOver) {
     startButton.hidden = false;
     gameStatus.hidden = false;
     if (correct)
-        score.innerHTML = gameScore + 10 + parseInt(parseInt(progress.style.width) / 2);
+        score.innerHTML = gameScore + parseInt(parseInt(progress.style.width) / 2);
     else
         score.innerHTML = gameScore
     score.hidden = false;
@@ -84,26 +84,21 @@ function highlightAnswer(btnIndex, next, timeIsOver) {
     }
 }
 
-function loadQuestion(btnIndex) {
-    if (btnIndex !== 0) {
-        gameScore += 10;
-        highlightAnswer(btnIndex, true);
-    }
-    else
-        updateField();
-}
-
 function eventHandler(btnIndex) {
     status[questionIndex] = true;
-    if (questionIndex === questions.length && btnIndex === rightAnswer)
+    if (questionIndex === questions.length && btnIndex === rightAnswer) {
+        gameScore += 10;
         finishGame(btnIndex, true, false);
+    }
     else {
         if (btnIndex === 0) {
             startGame();
-            loadQuestion(btnIndex);
+            updateField();
         }
-        else if (btnIndex === rightAnswer)
-            loadQuestion(btnIndex);
+        else if (btnIndex === rightAnswer) {
+            gameScore += 10;
+            highlightAnswer(btnIndex, true, false);
+        }
         else
             finishGame(btnIndex, false, false);
     }
