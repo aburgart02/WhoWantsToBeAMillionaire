@@ -28,8 +28,8 @@ function disable_buttons() {
     }
 }
 
-function finishGame(index, correct) {
-    highlightAnswer(index, false);
+function finishGame(index, correct, timeIsOver) {
+    highlightAnswer(index, false, timeIsOver);
     let startButton = document.getElementById('start');
     let gameStatus = document.getElementById('st');
     let score = document.getElementById('sc');
@@ -66,12 +66,21 @@ function updateField() {
     picture.src = 'materials/question_field.png';
 }
 
-function highlightAnswer(btnIndex, next) {
+function highlightAnswer(btnIndex, next, timeIsOver) {
     let picture = document.getElementById('pct');
-    picture.src = `materials/${btnIndex}.png`;
-    disable_buttons();
-    if (next) {
-        let timeout = setTimeout('updateField()', 2000);
+    if (timeIsOver)
+        picture.src = `materials/${questions[status.length - 1][2]}_${questions[status.length - 1][2]}.png`;
+    else {
+        picture.src = `materials/${btnIndex}.png`;
+        disable_buttons();
+        setTimeout(showAnswer, 2000);
+        function showAnswer() {
+            picture.src = `materials/${btnIndex}_${questions[status.length - 2][2]}.png`;
+            setTimeout(() => {
+                if (next)
+                    updateField();
+            }, 1000);
+        }
     }
 }
 
@@ -87,7 +96,7 @@ function loadQuestion(btnIndex) {
 function eventHandler(btnIndex) {
     status[questionIndex] = true;
     if (questionIndex === questions.length && btnIndex === rightAnswer)
-        finishGame(btnIndex, true);
+        finishGame(btnIndex, true, false);
     else {
         if (btnIndex === 0) {
             startGame();
@@ -96,7 +105,7 @@ function eventHandler(btnIndex) {
         else if (btnIndex === rightAnswer)
             loadQuestion(btnIndex);
         else
-            finishGame(btnIndex, false);
+            finishGame(btnIndex, false, false);
     }
 }
 
@@ -107,7 +116,7 @@ function startTimer(index) {
     function frame() {
         if (width <= 0) {
             clearInterval(id);
-            finishGame(index, false);
+            finishGame(index, false, true);
         }
         if (status[index + 1] === true) {
             clearInterval(id);
