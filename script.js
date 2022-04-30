@@ -55,9 +55,11 @@ function startGame() {
     let startButton = document.getElementById('start');
     let score = document.getElementById('sc');
     let gameStatus = document.getElementById('st');
+    let fiftyFiftyHint = document.getElementById('50-50')
     startButton.hidden = true;
     score.hidden = true;
     gameStatus.hidden = true;
+    fiftyFiftyHint.hidden = false;
     status = [];
     rightAnswer = 0;
     gameScore = 0;
@@ -88,11 +90,13 @@ function updateField() {
     let question = document.getElementById('q');
     let buttons = document.querySelectorAll('button');
     question.innerHTML = questions[questionIndex][0];
-    for (let btn of buttons) {
-        btn.disabled = false;
-        btn.innerHTML = questions[questionIndex][1][answerIndex];
+    while (answerIndex < 5) {
+        buttons[answerIndex].disabled = false;
+        buttons[answerIndex].innerHTML = questions[questionIndex][1][answerIndex];
         answerIndex += 1;
     }
+    buttons[5].disabled = false;
+    buttons[6].disabled = false;
     rightAnswer = questions[questionIndex][2];
     questionIndex += 1;
     answerIndex = 0;
@@ -126,4 +130,23 @@ function disableButtons() {
     for (let btn of buttons) {
         btn.disabled = true;
     }
+}
+
+function fiftyFifty() {
+    let first = rightAnswer;
+    let second = rightAnswer;
+    let buttons = document.querySelectorAll('button');
+    while (first === rightAnswer)
+        first = Math.floor(Math.random() * 4) + 1;
+    while (second === rightAnswer || second === first)
+        second = Math.floor(Math.random() * 4) + 1;
+    buttons[first - 1].disabled = true;
+    buttons[first - 1].innerHTML = '';
+    buttons[second - 1].disabled = true;
+    buttons[second - 1].innerHTML = '';
+    buttons[5].hidden = true;
+}
+
+function callFriend() {
+
 }

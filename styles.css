@@ -49,6 +49,16 @@
     left: 50%;
 }
 
+.fiftyFiftyButton {
+    top: 10%;
+    left: 80%;
+}
+
+.callFriendButton {
+    top: 10%;
+    left: 90%;
+}
+
 .question {
     position: absolute;
     color: white;
