@@ -9,6 +9,48 @@ let questionIndex = 0;
 let answerIndex = 0;
 let gameScore = 0;
 
+function eventHandler(buttonIndex) {
+    status[questionIndex] = true;
+    if (questionIndex === questions.length && buttonIndex === rightAnswer) {
+        gameScore += 10;
+        highlightAnswer(buttonIndex, false, true, false);
+    }
+    else {
+        if (buttonIndex === 0) {
+            startGame();
+            updateField();
+        }
+        else if (buttonIndex === rightAnswer) {
+            gameScore += 10;
+            highlightAnswer(buttonIndex, true, true, false);
+        }
+        else
+            highlightAnswer(buttonIndex, false, false, false);
+    }
+}
+
+function highlightAnswer(buttonIndex, hasNext, isCorrect, timeIsOver) {
+    let picture = document.getElementById('pct');
+    if (timeIsOver) {
+        picture.src = `materials/${questions[status.length - 1][2]}_${questions[status.length - 1][2]}.png`;
+        finishGame(isCorrect);
+    }
+    else {
+        picture.src = `materials/${buttonIndex}.png`;
+        disable_buttons();
+        setTimeout(showAnswer, 2000);
+        function showAnswer() {
+            picture.src = `materials/${buttonIndex}_${questions[status.length - 2][2]}.png`;
+            setTimeout(() => {
+                if (hasNext)
+                    updateField();
+                else
+                    finishGame(isCorrect);
+            }, 1000);
+        }
+    }
+}
+
 function startGame() {
     let startButton = document.getElementById('start');
     let score = document.getElementById('sc');
@@ -21,15 +63,7 @@ function startGame() {
     gameScore = 0;
 }
 
-function disable_buttons() {
-    let buttons = document.querySelectorAll('button');
-    for (let btn of buttons) {
-        btn.disabled = true;
-    }
-}
-
-function finishGame(index, correct, timeIsOver) {
-    highlightAnswer(index, false, timeIsOver);
+function finishGame(isCorrect) {
     let startButton = document.getElementById('start');
     let gameStatus = document.getElementById('st');
     let score = document.getElementById('sc');
@@ -39,10 +73,10 @@ function finishGame(index, correct, timeIsOver) {
     startButton.innerHTML = 'Начать игру';
     startButton.hidden = false;
     gameStatus.hidden = false;
-    if (correct)
-        score.innerHTML = gameScore + parseInt(parseInt(progress.style.width) / 2);
+    if (isCorrect)
+        score.innerHTML = gameScore;
     else
-        score.innerHTML = gameScore
+        score.innerHTML = gameScore - parseInt(parseInt(progress.style.width) / 2);
     score.hidden = false;
     questionIndex = 0;
     rightAnswer = 0;
@@ -66,54 +100,16 @@ function updateField() {
     picture.src = 'materials/question_field.png';
 }
 
-function highlightAnswer(btnIndex, next, timeIsOver) {
-    let picture = document.getElementById('pct');
-    if (timeIsOver)
-        picture.src = `materials/${questions[status.length - 1][2]}_${questions[status.length - 1][2]}.png`;
-    else {
-        picture.src = `materials/${btnIndex}.png`;
-        disable_buttons();
-        setTimeout(showAnswer, 2000);
-        function showAnswer() {
-            picture.src = `materials/${btnIndex}_${questions[status.length - 2][2]}.png`;
-            setTimeout(() => {
-                if (next)
-                    updateField();
-            }, 1000);
-        }
-    }
-}
-
-function eventHandler(btnIndex) {
-    status[questionIndex] = true;
-    if (questionIndex === questions.length && btnIndex === rightAnswer) {
-        gameScore += 10;
-        finishGame(btnIndex, true, false);
-    }
-    else {
-        if (btnIndex === 0) {
-            startGame();
-            updateField();
-        }
-        else if (btnIndex === rightAnswer) {
-            gameScore += 10;
-            highlightAnswer(btnIndex, true, false);
-        }
-        else
-            finishGame(btnIndex, false, false);
-    }
-}
-
-function startTimer(index) {
+function startTimer(buttonIndex) {
     let progress = document.getElementById("progress");
     let width = 60;
     let id = setInterval(frame, 500);
     function frame() {
         if (width <= 0) {
             clearInterval(id);
-            finishGame(index, false, true);
+            highlightAnswer(buttonIndex, false, false, true);
         }
-        if (status[index + 1] === true) {
+        if (status[buttonIndex + 1] === true) {
             clearInterval(id);
             gameScore += parseInt(width / 2);
         }
@@ -122,5 +118,12 @@ function startTimer(index) {
             progress.style.width = width + '%';
             progress.innerHTML = parseInt(width / 2);
         }
+    }
+}
+
+function disable_buttons() {
+    let buttons = document.querySelectorAll('button');
+    for (let btn of buttons) {
+        btn.disabled = true;
     }
 }
