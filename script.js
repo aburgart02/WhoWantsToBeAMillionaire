@@ -8,6 +8,8 @@ let rightAnswer = 0;
 let questionIndex = 0;
 let answerIndex = 0;
 let gameScore = 0;
+let callFriendIsUsed = false;
+let removedButtons = [];
 
 function eventHandler(buttonIndex) {
     status[questionIndex] = true;
@@ -55,14 +57,18 @@ function startGame() {
     let startButton = document.getElementById('start');
     let score = document.getElementById('sc');
     let gameStatus = document.getElementById('st');
-    let fiftyFiftyHint = document.getElementById('50-50')
+    let fiftyFiftyHint = document.getElementById('50-50');
+    let callFriend = document.getElementById('call');
     startButton.hidden = true;
     score.hidden = true;
     gameStatus.hidden = true;
     fiftyFiftyHint.hidden = false;
+    callFriend.innerHTML = '<img src="materials/call_friend.png" width="150" height="150">';
+    callFriend.hidden = false;
     status = [];
     rightAnswer = 0;
     gameScore = 0;
+    callFriendIsUsed = false;
 }
 
 function finishGame(isCorrect) {
@@ -87,6 +93,7 @@ function finishGame(isCorrect) {
 function updateField() {
     startTimer(questionIndex);
     status[questionIndex] = true;
+    removedButtons = [];
     let question = document.getElementById('q');
     let buttons = document.querySelectorAll('button');
     question.innerHTML = questions[questionIndex][0];
@@ -97,6 +104,8 @@ function updateField() {
     }
     buttons[5].disabled = false;
     buttons[6].disabled = false;
+    if (callFriendIsUsed)
+        buttons[6].hidden = true;
     rightAnswer = questions[questionIndex][2];
     questionIndex += 1;
     answerIndex = 0;
@@ -145,8 +154,24 @@ function fiftyFifty() {
     buttons[second - 1].disabled = true;
     buttons[second - 1].innerHTML = '';
     buttons[5].hidden = true;
+    removedButtons = [first, second];
 }
 
 function callFriend() {
-
+    let buttons = document.querySelectorAll('button');
+    let rand = Math.round(Math.random() * 100);
+    let friendAnswer = rightAnswer;
+    if (rand >= 60) {
+        if (removedButtons.length === 0) {
+            while (friendAnswer === rightAnswer)
+                friendAnswer = Math.floor(Math.random() * 4) + 1;
+        }
+        else {
+            while (friendAnswer === rightAnswer || friendAnswer === removedButtons[0] || friendAnswer === removedButtons[1])
+                friendAnswer = Math.floor(Math.random() * 4) + 1;
+        }
+    }
+    buttons[6].innerHTML = friendAnswer;
+    buttons[6].disabled = true;
+    callFriendIsUsed = true;
 }
