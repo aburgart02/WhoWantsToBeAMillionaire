@@ -37,7 +37,7 @@ function highlightAnswer(buttonIndex, hasNext, isCorrect, timeIsOver) {
     }
     else {
         picture.src = `materials/${buttonIndex}.png`;
-        disable_buttons();
+        disableButtons();
         setTimeout(showAnswer, 2000);
         function showAnswer() {
             picture.src = `materials/${buttonIndex}_${questions[status.length - 2][2]}.png`;
@@ -68,7 +68,7 @@ function finishGame(isCorrect) {
     let gameStatus = document.getElementById('st');
     let score = document.getElementById('sc');
     let progress = document.getElementById("progress");
-    disable_buttons();
+    disableButtons();
     startButton.disabled = false;
     startButton.innerHTML = 'Начать игру';
     startButton.hidden = false;
@@ -121,7 +121,7 @@ function startTimer(buttonIndex) {
     }
 }
 
-function disable_buttons() {
+function disableButtons() {
     let buttons = document.querySelectorAll('button');
     for (let btn of buttons) {
         btn.disabled = true;
