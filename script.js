@@ -1,8 +1,3 @@
-let questions = [['В каком году произошла Куликовская битва?', ['1380', '1340', '1223', '1136'], 1],
-                 ['Столица Эквадора', ['Лима', 'Асунсьон', 'Кито', 'Каракас'], 3],
-                 ['В каком году были проведены первые современные Олимпийские игры?', ['1900', '1892', '1902', '1896'], 4],
-                 ['Сколько наград "Оскар" получил фильм "Побег из Шоушенка?"', ['3', '0', '5', '1'], 2],
-                 ['В какой из этих стран один из официальных языков - французский?', ['Республика Гаити', 'Кения', 'Венесуэла', 'Боливия'], 1]];
 let status = []
 let rightAnswer = 0;
 let questionIndex = 0;
@@ -10,6 +5,20 @@ let answerIndex = 0;
 let gameScore = 0;
 let callFriendIsUsed = false;
 let removedButtons = [];
+let questions = []
+const requestURL = 'materials/questions.json';
+let request = new XMLHttpRequest();
+request.open('GET', requestURL);
+request.responseType = 'json';
+request.send();
+request.onload = function() {
+    let jsonObjects = request.response;
+    for (let questionNumber in jsonObjects){
+        questions.push(jsonObjects[questionNumber]);
+    }
+
+}
+
 
 function eventHandler(buttonIndex) {
     status[questionIndex] = true;
