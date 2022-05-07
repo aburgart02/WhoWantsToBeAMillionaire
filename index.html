@@ -18,15 +18,17 @@
     <img src="materials/question_field.png" class="picture" alt="Поле ответов" id="pct">
     <label class="question" id="q"></label>
     <label class="score" id="sc"></label>
-    <label class="status" id="st" hidden>Игра окончена</label>
-    <label for="name"></label><input type="text" id="name">
+    <label class="status" id="st" hidden></label>
+    <label for="name" class="nameField"><input type="text" id="name" style="font-size: 24px" placeholder="Ваше имя"></label>
     <p id="leaderboard" class="table"></p>
     <div class="buttons">
         <button class="button1" onclick="eventHandler(1)" disabled></button>
         <button class="button2" onclick="eventHandler(2)" disabled></button>
         <button class="button3" onclick="eventHandler(3)" disabled></button>
         <button class="button4" onclick="eventHandler(4)" disabled></button>
-        <button class="startButton" onclick="eventHandler(0)" id="start">Начать игру</button>
+        <button class="startButton" onclick="eventHandler(0)" id="start"
+                style="background: #0000ff; border-radius: 50px; font-size: 38px; height: 60px; width: 400px;
+                border: solid yellow 4px;">Начать игру</button>
         <button class="fiftyFiftyButton" onclick="fiftyFifty()" id="50-50" style="height:150px;width:200px" disabled>
             <img src="materials/50-50.png" width="150" height="150">
         </button>

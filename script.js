@@ -74,6 +74,7 @@ function startGame() {
     leaderboard.hidden = true;
     score.hidden = true;
     gameStatus.hidden = true;
+    gameStatus.innerHTML = 'Игра окончена';
     fiftyFiftyHint.hidden = false;
     callFriend.innerHTML = '<img src="materials/call_friend.png" width="150" height="150">';
     callFriend.hidden = false;
@@ -107,11 +108,13 @@ function finishGame(isCorrect) {
     startButton.hidden = false;
     nameField.hidden = false;
     leaderboard.hidden = false;
-    gameStatus.hidden = false;
-    if (isCorrect)
-        score.innerHTML = gameScore;
+    if (isCorrect) {
+        score.innerHTML = 'Cчёт: ' + String(gameScore);
+        gameStatus.innerHTML = 'Вы победили!';
+    }
     else
-        score.innerHTML = gameScore - parseInt(parseInt(progress.style.width) / 2);
+        score.innerHTML = 'Cчёт: ' + String(gameScore - parseInt(parseInt(progress.style.width) / 2));
+    gameStatus.hidden = false;
     UpdateLeaderboard(nameField, score, leaderboard);
     score.hidden = false;
     questionIndex = 0;
@@ -119,12 +122,14 @@ function finishGame(isCorrect) {
 }
 
 function UpdateLeaderboard(nameField, score, leaderboard) {
-    playerRecords.push([nameField.value, score.innerHTML]);
+    playerRecords.push([nameField.value, score.innerHTML.split(' ')[1]]);
     playerRecords = playerRecords.sort(function (a, b) {
         return b[1] - a[1];
     });
-    leaderboard.innerHTML = '';
+    leaderboard.innerHTML = 'Leaderboard<br>';
     for (let entry of playerRecords) {
+        if (entry[0] === '')
+            entry[0] = 'Игрок';
         leaderboard.innerHTML += entry[0] + ': ' + entry[1] + '<br>';
     }
 }
