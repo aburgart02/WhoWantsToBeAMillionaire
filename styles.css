@@ -59,6 +59,11 @@
     left: 90%;
 }
 
+.table {
+    color: white;
+    font-size: 24px;
+}
+
 .question {
     position: absolute;
     color: white;

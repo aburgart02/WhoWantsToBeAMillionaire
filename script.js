@@ -1,11 +1,12 @@
-let status = []
+let status = [];
 let rightAnswer = 0;
 let questionIndex = 0;
 let answerIndex = 0;
 let gameScore = 0;
 let callFriendIsUsed = false;
 let removedButtons = [];
-let questions = []
+let questions = [];
+let playerRecords = [];
 const requestURL = 'materials/questions.json';
 let request = new XMLHttpRequest();
 request.open('GET', requestURL);
@@ -16,9 +17,7 @@ request.onload = function() {
     for (let questionNumber in jsonObjects){
         questions.push(jsonObjects[questionNumber]);
     }
-
 }
-
 
 function eventHandler(buttonIndex) {
     status[questionIndex] = true;
@@ -64,11 +63,15 @@ function highlightAnswer(buttonIndex, hasNext, isCorrect, timeIsOver) {
 
 function startGame() {
     let startButton = document.getElementById('start');
+    let nameField = document.getElementById('name');
     let score = document.getElementById('sc');
     let gameStatus = document.getElementById('st');
     let fiftyFiftyHint = document.getElementById('50-50');
     let callFriend = document.getElementById('call');
+    let leaderboard = document.getElementById('leaderboard');
     startButton.hidden = true;
+    nameField.hidden = true;
+    leaderboard.hidden = true;
     score.hidden = true;
     gameStatus.hidden = true;
     fiftyFiftyHint.hidden = false;
@@ -78,25 +81,52 @@ function startGame() {
     rightAnswer = 0;
     gameScore = 0;
     callFriendIsUsed = false;
+    shuffleQuestions(questions);
+}
+
+function shuffleQuestions(array) {
+    let currentIndex = array.length;
+    while (currentIndex !== 0) {
+        let randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
 }
 
 function finishGame(isCorrect) {
     let startButton = document.getElementById('start');
+    let nameField = document.getElementById('name');
     let gameStatus = document.getElementById('st');
     let score = document.getElementById('sc');
     let progress = document.getElementById("progress");
+    let leaderboard = document.getElementById('leaderboard');
     disableButtons();
     startButton.disabled = false;
     startButton.innerHTML = 'Начать игру';
     startButton.hidden = false;
+    nameField.hidden = false;
+    leaderboard.hidden = false;
     gameStatus.hidden = false;
     if (isCorrect)
         score.innerHTML = gameScore;
     else
         score.innerHTML = gameScore - parseInt(parseInt(progress.style.width) / 2);
+    UpdateLeaderboard(nameField, score, leaderboard);
     score.hidden = false;
     questionIndex = 0;
     rightAnswer = 0;
+}
+
+function UpdateLeaderboard(nameField, score, leaderboard) {
+    playerRecords.push([nameField.value, score.innerHTML]);
+    playerRecords = playerRecords.sort(function (a, b) {
+        return b[1] - a[1];
+    });
+    leaderboard.innerHTML = '';
+    for (let entry of playerRecords) {
+        leaderboard.innerHTML += entry[0] + ': ' + entry[1] + '<br>';
+    }
 }
 
 function updateField() {
